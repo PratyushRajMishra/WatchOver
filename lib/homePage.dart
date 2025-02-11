@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:watchover/Permissions/getCallLogs.dart';
+import 'package:watchover/Permissions/getContact.dart';
+import 'package:watchover/Permissions/getMessages.dart';
 
 import 'Permissions/getLocation.dart';
 
@@ -64,6 +67,39 @@ class _HomepageState extends State<Homepage> {
                 );
               },
               child: Text('Location'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GetMessagesPage(),
+                  ),
+                );
+              },
+              child: Text('Messages'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GetContactPage(),
+                  ),
+                );
+              },
+              child: Text('Contacts'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GetCallLogsPage(),
+                  ),
+                );
+              },
+              child: Text('Call Logs'),
             )
           ],
         ),
