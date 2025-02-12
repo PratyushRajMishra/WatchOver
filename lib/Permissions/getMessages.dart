@@ -35,7 +35,23 @@ class _GetMessagesPageState extends State<GetMessagesPage> {
         isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("SMS permission denied")),
+        SnackBar(
+          content: const Text(
+            "[ACCESS DENIED] SMS permission required!",
+            style: TextStyle(
+              color: Colors.greenAccent,
+              fontFamily: 'Courier',
+              fontSize: 16,
+            ),
+          ),
+          backgroundColor: Colors.black,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.greenAccent, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }
@@ -49,37 +65,75 @@ class _GetMessagesPageState extends State<GetMessagesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black, // Terminal background
       appBar: AppBar(
-        title: const Text('Read SMS Messages'),
+        leading: BackButton(
+          color: Colors.green,
+        ),
+        title: const Text(
+          'Messages',
+          style: TextStyle(
+            color: Colors.greenAccent,
+            fontFamily: 'Courier',
+          ),
+        ),
+        backgroundColor: Colors.black,
+        elevation: 0,
       ),
       body: isLoading
-          ? const Center(child: Text('Fetching messages...'))
+          ? const Center(
+        child: Text(
+          "[FETCHING MESSAGES...]\n███████▒▒▒▒▒▒▒▒▒▒▒▒",
+          style: TextStyle(
+            color: Colors.greenAccent,
+            fontFamily: 'Courier',
+            fontSize: 18,
+          ),
+        ),
+      )
           : messages.isNotEmpty
           ? ListView.builder(
         itemCount: messages.length,
         itemBuilder: (context, index) {
           final message = messages[index];
           return Card(
-            margin: const EdgeInsets.symmetric(
-                vertical: 8, horizontal: 12),
+            color: Colors.black, // Black terminal theme
             elevation: 4,
-            child: ListTile(
-              contentPadding: const EdgeInsets.all(16),
-              title: Text(
-                message.address ?? "Unknown Sender",
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              subtitle: Column(
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(color: Colors.greenAccent, width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 4),
-                  Text(message.body ?? "No content"),
+                  Text(
+                    message.address ?? "Unknown Sender",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.greenAccent,
+                      fontFamily: 'Courier',
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    message.body ?? "No content",
+                    style: const TextStyle(
+                      color: Colors.greenAccent,
+                      fontFamily: 'Courier',
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     formatTimestamp(message.date),
                     style: const TextStyle(
-                        color: Colors.grey, fontSize: 12),
+                      color: Colors.grey,
+                      fontSize: 12,
+                      fontFamily: 'Courier',
+                    ),
                   ),
                 ],
               ),
@@ -87,7 +141,16 @@ class _GetMessagesPageState extends State<GetMessagesPage> {
           );
         },
       )
-          : const Center(child: Text('No messages found')),
+          : const Center(
+        child: Text(
+          "[ NO MESSAGES FOUND ]",
+          style: TextStyle(
+            color: Colors.greenAccent,
+            fontFamily: 'Courier',
+            fontSize: 18,
+          ),
+        ),
+      ),
     );
   }
 }

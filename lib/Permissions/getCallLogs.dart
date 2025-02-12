@@ -26,8 +26,30 @@ class _GetCallLogsPageState extends State<GetCallLogsPage> {
         callLogs = logs.toList();
       });
     } else {
-      print("Permission Denied");
+      showPermissionDeniedSnackBar();
     }
+  }
+
+  void showPermissionDeniedSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(
+          "[ACCESS DENIED] Call log permission required!",
+          style: TextStyle(
+            color: Colors.greenAccent,
+            fontFamily: 'Courier',
+            fontSize: 16,
+          ),
+        ),
+        backgroundColor: Colors.black,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.greenAccent, width: 2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
   }
 
   String formatDuration(int? seconds) {
@@ -39,50 +61,100 @@ class _GetCallLogsPageState extends State<GetCallLogsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Call Logs'),
-        centerTitle: true,
+        leading: BackButton(
+          color: Colors.green,
+        ),
+        title: const Text(
+          'Call Logs',
+          style: TextStyle(
+            color: Colors.greenAccent,
+            fontFamily: 'Courier',
+          ),
+        ),
+        centerTitle: false,
+        backgroundColor: Colors.black,
+        elevation: 0,
       ),
       body: callLogs.isEmpty
-          ? const Center(child: Text('Fetching Call logs...'))
+          ? const Center(
+        child: Text(
+          "[FETCHING CALL LOGS...]\n███████▒▒▒▒▒▒▒▒▒▒▒▒▒",
+          style: TextStyle(
+            color: Colors.greenAccent,
+            fontFamily: 'Courier',
+            fontSize: 18,
+          ),
+        ),
+      )
           : ListView.builder(
         itemCount: callLogs.length,
         itemBuilder: (context, index) {
           CallLogEntry log = callLogs[index];
 
           return Card(
-            elevation: 3,
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            color: Colors.black,
+            elevation: 4,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.greenAccent, width: 2),
+              borderRadius: BorderRadius.circular(10),
             ),
+            margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: Colors.greenAccent.withOpacity(0.2),
+                radius: 28,
                 child: Icon(
                   log.callType == CallType.missed
                       ? Icons.call_missed
                       : log.callType == CallType.incoming
                       ? Icons.call_received
                       : Icons.call_made,
-                  color: Colors.white,
+                  color: Colors.greenAccent,
                 ),
               ),
               title: Text(
                 log.name ?? "Unknown",
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.greenAccent,
+                  fontFamily: 'Courier',
+                ),
               ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Phone: ${log.number ?? "Unknown"}"),
-                  Text("Duration: ${formatDuration(log.duration)}"),
-                  Text("Date: ${DateTime.fromMillisecondsSinceEpoch(log.timestamp ?? 0)}"),
-                ],
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Phone: ${log.number ?? "Unknown"}",
+                      style: const TextStyle(
+                        color: Colors.greenAccent,
+                        fontFamily: 'Courier',
+                      ),
+                    ),
+                    Text(
+                      "Duration: ${formatDuration(log.duration)}",
+                      style: const TextStyle(
+                        color: Colors.greenAccent,
+                        fontFamily: 'Courier',
+                      ),
+                    ),
+                    Text(
+                      "Date: ${DateTime.fromMillisecondsSinceEpoch(log.timestamp ?? 0)}",
+                      style: const TextStyle(
+                        color: Colors.greenAccent,
+                        fontFamily: 'Courier',
+                      ),
+                    ),
+                  ],
+                ),
               ),
               trailing: Icon(
                 log.callType == CallType.missed ? Icons.warning : Icons.phone,
-                color: log.callType == CallType.missed ? Colors.red : Colors.green,
+                color: log.callType == CallType.missed ? Colors.red : Colors.greenAccent,
               ),
               contentPadding: const EdgeInsets.all(12),
             ),

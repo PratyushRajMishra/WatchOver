@@ -61,39 +61,77 @@ class _GetDeviceInfoPageState extends State<GetDeviceInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black, // Dark hacker-style background
       appBar: AppBar(
-        title: const Text('Device Info'),
+        leading: BackButton(
+          color: Colors.green,
+        ),
+        title: const Text(
+          'Device Info',
+          style: TextStyle(
+            fontFamily: 'monospace', // Terminal font
+            color: Colors.greenAccent,
+          ),
+        ),
+        backgroundColor: Colors.black,
+        elevation: 0,
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: isLoading
-            ? const Center(child: Text('Fetching Device info...'))
+            ? Center(
+          child: Text(
+            'Fetching Device info...\n███████▒▒▒▒▒▒▒▒▒▒',
+            style: TextStyle(
+              fontFamily: 'monospace',
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.greenAccent,
+            ),
+          ),
+        )
             : ListView.builder(
           itemCount: deviceInfo.length,
           itemBuilder: (context, index) {
             String key = deviceInfo.keys.elementAt(index);
             String value = deviceInfo[key]!;
-            return Card(
+
+            return Container(
               margin: const EdgeInsets.symmetric(vertical: 6),
-              shape: RoundedRectangleBorder(
+              decoration: BoxDecoration(
+                color: Colors.black,
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.greenAccent, width: 1.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.greenAccent.withOpacity(0.2),
+                    blurRadius: 4,
+                    spreadRadius: 2,
+                  ),
+                ],
               ),
-              elevation: 3,
               child: ListTile(
                 leading: Icon(
-                  Icons.info_outline,
-                  color: Colors.deepPurple,
+                  Icons.memory,
+                  color: Colors.greenAccent,
                 ),
                 title: Text(
                   key,
                   style: const TextStyle(
+                    fontFamily: 'monospace',
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    color: Colors.greenAccent,
                   ),
                 ),
                 subtitle: Text(
                   value,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  style: const TextStyle(
+                    fontFamily: 'monospace',
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             );

@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
@@ -18,27 +16,25 @@ class VideoView extends StatefulWidget {
 }
 
 class _VideoViewState extends State<VideoView> {
-  late final VideoPlayerController _videoPlayerController;
-  late final ChewieController _chewieController;
-  late final Chewie videoPlayerWidget;
+  late VideoPlayerController _videoPlayerController;
+  late ChewieController _chewieController;
   bool initialized = false;
 
   _initVideo() async {
     final video = await widget.videoFile;
-    _videoPlayerController = VideoPlayerController.file(video!)
-      ..setLooping(true)
-      ..initialize().then(
-            (_) => setState(() => initialized = true),
-      );
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoPlay: true,
-      looping: true,
-    );
+    if (video == null) return;
 
-    videoPlayerWidget = Chewie(
-      controller: _chewieController,
-    );
+    _videoPlayerController = VideoPlayerController.file(video)
+      ..setLooping(true)
+      ..initialize().then((_) {
+        _chewieController = ChewieController(
+          videoPlayerController: _videoPlayerController,
+          autoPlay: true,
+          looping: true,
+        );
+
+        setState(() => initialized = true);
+      });
   }
 
   @override
@@ -57,20 +53,50 @@ class _VideoViewState extends State<VideoView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: initialized
-      // If the video is initialized, display it
-          ? Scaffold(
-        body: Center(
-          child: AspectRatio(
-            aspectRatio: _videoPlayerController.value.aspectRatio,
-            child: videoPlayerWidget,
+      backgroundColor: Colors.black, // Hacker-style dark background
+      appBar: AppBar(
+        leading: const BackButton(color: Colors.green),
+        backgroundColor: Colors.black,
+        title: const Text(
+          'VIDEO',
+          style: TextStyle(
+            color: Colors.greenAccent,
+            fontFamily: 'Courier',
           ),
         ),
+        centerTitle: true,
+      ),
+      body: initialized
+          ? Stack(
+        children: [
+          Center(
+            child: AspectRatio(
+              aspectRatio: _videoPlayerController.value.aspectRatio,
+              child: Chewie(controller: _chewieController),
+            ),
+          ),
+          Container(
+            color: Colors.green.withOpacity(0.1), // Green tint overlay
+          ),
+        ],
       )
-      // If the video is not yet initialized, display a spinner
           : const Center(
-        child: CircularProgressIndicator(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(color: Colors.greenAccent),
+            SizedBox(height: 10),
+            Text(
+              'FETCHING...',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.greenAccent,
+                fontSize: 18,
+                fontFamily: 'Courier',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
