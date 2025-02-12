@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:watchover/Permissions/getCallLogs.dart';
 import 'package:watchover/Permissions/getContact.dart';
+import 'package:watchover/Permissions/getDeviceInfoPage.dart';
+import 'package:watchover/Permissions/getMedia.dart';
 import 'package:watchover/Permissions/getMessages.dart';
 
 import 'Permissions/getLocation.dart';
@@ -100,7 +102,30 @@ class _HomepageState extends State<Homepage> {
                 );
               },
               child: Text('Call Logs'),
-            )
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GetMediaPage(),
+                  ),
+                );
+              },
+              child: Text('Media'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GetDeviceInfoPage(),
+                  ),
+                );
+              },
+              child: Text('Device Info'),
+            ),
+
           ],
         ),
       ),
